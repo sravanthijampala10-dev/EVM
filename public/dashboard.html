@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - E-Voting System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>Secure<span>Vote</span> Dashboard</h1>
+                <p>Live Voting Analytics</p>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+            </nav>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="main-content">
+            <!-- Stats Overview -->
+            <section class="stats-overview">
+                <h2 class="section-title">Live Voting Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card animate-slide-up">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h3>Total Votes</h3>
+                            <div class="stat-number" id="dashboardTotalVotes">0</div>
+                            <div class="stat-change" id="voteChange">+0 today</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-up" style="animation-delay: 0.1s">
+                        <div class="stat-icon">👤</div>
+                        <div class="stat-info">
+                            <h3>Registered Voters</h3>
+                            <div class="stat-number" id="dashboardVoters">0</div>
+                            <div class="stat-change" id="voterChange">+0 registered</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-up" style="animation-delay: 0.2s">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <h3>Current Leader</h3>
+                            <div class="stat-number" id="currentLeader">-</div>
+                            <div class="stat-change" id="leaderVotes">0 votes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card animate-slide-up" style="animation-delay: 0.3s">
+                        <div class="stat-icon">⚖️</div>
+                        <div class="stat-info">
+                            <h3>Vote Rigging Scale</h3>
+                            <div class="stat-number" id="riggingScale">0%</div>
+                            <div class="stat-change" id="riggingStatus">Low Risk</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="charts-grid">
+                    <!-- Vote Distribution Chart -->
+                    <div class="chart-container">
+                        <h3>Vote Distribution</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="voteDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Voting Trend Chart -->
+                    <div class="chart-container">
+                        <h3>Voting Trend</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="votingTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Candidates Ranking -->
+            <section class="ranking-section">
+                <h3 class="section-title">Candidates Ranking</h3>
+                <div class="ranking-table-container">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Candidate</th>
+                                <th>Party</th>
+                                <th>Votes</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="candidatesRanking">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+            
+            <!-- Fraud Detection -->
+            <section class="fraud-section">
+                <h3 class="section-title">Fraud Detection System</h3>
+                <div class="fraud-metrics">
+                    <div class="metric-card">
+                        <h4>Duplicate Votes</h4>
+                        <div class="metric-value" id="duplicateVotes">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="duplicateBar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h4>Unverified Votes</h4>
+                        <div class="metric-value" id="unverifiedVotes">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="unverifiedBar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h4>Suspicious Patterns</h4>
+                        <div class="metric-value" id="suspiciousPatterns">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="suspiciousBar"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alerts-container">
+                    <h4>Recent Alerts</h4>
+                    <div class="alerts-list" id="alertsList">
+                        <!-- Alerts will be added here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 SecureVote E-Voting System. Real-time Monitoring Dashboard</p>
+            <p>Last Updated: <span id="lastUpdated">-</span></p>
+        </footer>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>Secure<span>Vote</span></h1>
+                <p>Digital Voting System</p>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/register.html" class="nav-link">Register Voter</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-card animate-slide-up">
+                    <h2>Welcome to Secure E-Voting System</h2>
+                    <p>Cast your vote securely using Aadhar verification and biometric authentication</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalVotes">0</span>
+                            <span class="stat-label">Total Votes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="registeredVoters">0</span>
+                            <span class="stat-label">Registered Voters</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Voting Process Steps -->
+            <section class="steps-section">
+                <h3 class="section-title">Voting Process</h3>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4>Aadhar Verification</h4>
+                        <p>Verify your identity using Aadhar number</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4>Select Candidate</h4>
+                        <p>Choose your preferred candidate</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4>Biometric Authentication</h4>
+                        <p>Verify with fingerprint or Face ID</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4>Submit Vote</h4>
+                        <p>Securely cast your vote</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Voting Interface -->
+            <section class="voting-section">
+                <div class="voting-container">
+                    <!-- Step 1: Aadhar Verification -->
+                    <div class="voting-step active" id="step1">
+                        <h3>Step 1: Aadhar Verification</h3>
+                        <div class="form-group">
+                            <label for="aadharNumber">Enter Aadhar Number</label>
+                            <input type="text" id="aadharNumber" pattern="[0-9]{12}" maxlength="12"
+                                placeholder="Enter 12-digit Aadhar number">
+                            <div class="error-message" id="aadharError"></div>
+                        </div>
+                        <button class="btn-primary" onclick="verifyAadhar()">Verify Aadhar</button>
+
+                        <div class="biometric-options"
+                            style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                            <button class="btn-secondary" onclick="loginWithBiometric()" id="biometricLoginBtn">Login
+                                with Biometric (WebAuthn)</button>
+                            <button class="btn-secondary" onclick="registerBiometric()" id="biometricRegisterBtn"
+                                style="display: none;">Register New Device</button>
+                            <div id="biometricMsg"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Candidate Selection -->
+                    <div class="voting-step" id="step2">
+                        <h3>Step 2: Select Candidate</h3>
+                        <div class="candidates-grid" id="candidatesContainer">
+                            <!-- Candidates will be loaded here -->
+                        </div>
+                        <div class="step-buttons">
+                            <button class="btn-secondary" onclick="previousStep(2)">Back</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Biometric Verification -->
+                    <div class="voting-step" id="step3">
+                        <h3>Step 3: Biometric Verification</h3>
+                        <div class="biometric-container">
+                            <div class="scanner-selector">
+                                <button class="btn-tab active"
+                                    onclick="switchScanner('fingerprint')">Fingerprint</button>
+                                <button class="btn-tab" onclick="switchScanner('face')">Face ID</button>
+                                <button class="btn-tab" onclick="switchScanner('usb')">USB Device</button>
+                                <button class="btn-tab" onclick="switchScanner('demo')">Demo Scanner</button>
+                            </div>
+
+                            <!-- Fingerprint Scanner View -->
+                            <div id="fingerprintView" class="scanner-view active">
+                                <div class="fingerprint-scanner">
+                                    <div class="fingerprint-icon">
+                                        <svg viewBox="0 0 100 100">
+                                            <path d="M50,20 Q65,15 70,30 T85,40" />
+                                            <path d="M30,40 Q40,25 50,30 T60,45" />
+                                            <circle cx="50" cy="65" r="8" />
+                                        </svg>
+                                    </div>
+                                    <p>Place your finger on the scanner</p>
+                                </div>
+                                <button class="btn-primary" onclick="simulateFingerprint()">Scan Fingerprint</button>
+                            </div>
+
+                            <!-- Face ID Scanner View -->
+                            <div id="faceView" class="scanner-view">
+                                <div class="face-scanner">
+                                    <div class="camera-container">
+                                        <video id="faceVideo" autoplay playsinline></video>
+                                        <div class="face-overlay">
+                                            <div class="face-frame"></div>
+                                            <div class="scan-line"></div>
+                                        </div>
+                                    </div>
+                                    <p>Center your face in the frame</p>
+                                </div>
+                                <button class="btn-primary" onclick="scanFace()">Start Face Scan</button>
+                            </div>
+
+                            <!-- Demo Scanner View -->
+                            <div id="demoView" class="scanner-view">
+                                <div class="demo-scanner">
+                                    <div class="demo-icon">⚙️</div>
+                                    <p>Simulation Mode: No hardware required</p>
+                                </div>
+                                <button class="btn-primary" onclick="simulateDemoScan()">Perform Demo Scan</button>
+                            </div>
+
+                            <!-- USB Scanner View (RD Service) -->
+                            <div id="usbView" class="scanner-view">
+                                <div class="usb-scanner">
+                                    <div class="usb-status-icon" id="usbStatusIcon">🔌</div>
+                                    <h4 id="usbStatusTitle">USB Scanner (RD Service)</h4>
+                                    <p id="usbStatusText">Connect your Mantra/Morpho device</p>
+
+                                    <div class="device-info" id="usbDeviceInfo" style="display: none;">
+                                        <div class="info-row"><span>Status:</span> <span id="deviceReady"
+                                                class="badge-ready">Ready</span></div>
+                                        <div class="info-row"><span>Device:</span> <span id="deviceName">Mantra
+                                                MFS100</span></div>
+                                    </div>
+                                </div>
+                                <div class="scanner-actions">
+                                    <button class="btn-secondary" onclick="discoverUSBDevice()"
+                                        id="btnDiscover">Discover Device</button>
+                                    <button class="btn-primary" onclick="captureFingerprintUSB()" id="btnCapture"
+                                        style="display: none;">Capture Fingerprint</button>
+                                </div>
+                            </div>
+
+                            <div class="biometric-status" id="biometricStatus"></div>
+                        </div>
+                        <div class="step-buttons">
+                            <button class="btn-secondary" onclick="previousStep(3)">Back</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Vote Confirmation -->
+                    <div class="voting-step" id="step4">
+                        <h3>Step 4: Confirm Your Vote</h3>
+                        <div class="confirmation-card">
+                            <h4>Vote Summary</h4>
+                            <div class="summary-details">
+                                <p><strong>Aadhar Number:</strong> <span id="confirmAadhar"></span></p>
+                                <p><strong>Selected Candidate:</strong> <span id="confirmCandidate"></span></p>
+                                <p><strong>Timestamp:</strong> <span id="confirmTime"></span></p>
+                            </div>
+                            <div class="vote-buttons">
+                                <button class="btn-secondary" onclick="previousStep(4)">Back</button>
+                                <button class="btn-success" onclick="submitVote()">Submit Vote</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vote Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">✓</div>
+                        <h3>Vote Submitted Successfully!</h3>
+                        <p>Your vote has been recorded securely.</p>
+                        <button class="btn-primary" onclick="resetVoting()">Vote Again</button>
+                    </div>
+                </div>
+
+                <!-- Aadhar Verification Bar -->
+                <div class="verification-bar">
+                    <h4>Verify Aadhar Again</h4>
+                    <div class="verification-input">
+                        <input type="text" id="verifyAadhar" placeholder="Enter Aadhar to verify">
+                        <button class="btn-verify" onclick="verifyAadharAgain()">Verify</button>
+                    </div>
+                    <div class="verification-result" id="verificationResult"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 SecureVote E-Voting System. All rights reserved.</p>
+            <p>This is a demonstration system for educational purposes.</p>
+        </footer>
+    </div>
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-content">
+            <h2>About SecureVote</h2>
+            <p>SecureVote is an advanced electronic voting system that ensures secure, transparent, and tamper-proof
+                elections. Our system leverages Aadhar verification and biometric authentication to guarantee one
+                person, one vote.</p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <h4>🔐 Secure Authentication</h4>
+                    <p>Two-factor authentication using Aadhar and fingerprint</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📊 Real-time Monitoring</h4>
+                    <p>Live dashboard with fraud detection capabilities</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚖️ Fraud Detection</h4>
+                    <p>Advanced algorithms to detect vote rigging attempts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+    <script src="js/biometric-client.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

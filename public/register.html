@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Voter Registration - SecureVote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>Secure<span>Vote</span></h1>
+                <p>Voter Registration</p>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/register" class="nav-link active">Register New Voter</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section class="voting-section">
+                <style>
+                    .registration-form {
+                        max-width: 500px;
+                        margin: 0 auto;
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 12px;
+                        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+                    }
+                </style>
+                <div class="registration-form">
+                    <h2>Enroll New Voter</h2>
+                    <p>Add a new person to the voting database.</p>
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" placeholder="Enter Full Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="regAge" placeholder="Enter Age">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Aadhar Number</label>
+                        <input type="text" id="regAadhar" maxlength="12" placeholder="12-digit Aadhar Number">
+                    </div>
+
+                    <button class="btn-primary" onclick="submitRegistration()">Register Voter</button>
+                    <div id="regStatus" style="margin-top: 15px;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        async function submitRegistration() {
+            const name = document.getElementById('regName').value;
+            const age = document.getElementById('regAge').value;
+            const aadhar = document.getElementById('regAadhar').value;
+            const status = document.getElementById('regStatus');
+
+            if (!name || !age || !aadhar) {
+                status.innerHTML = '<span style="color:red">All fields required</span>';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/register-voter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, age, aadhar })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    status.innerHTML = '<span style="color:green">Voter Added! You can now go to Home and Register Biometrics.</span>';
+                    setTimeout(() => window.location.href = '/', 2000);
+                } else {
+                    status.innerHTML = `<span style="color:red">${data.message}</span>`;
+                }
+            } catch (e) {
+                status.innerHTML = `<span style="color:red">Error: ${e.message}</span>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
